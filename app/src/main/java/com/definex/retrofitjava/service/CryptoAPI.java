@@ -15,13 +15,21 @@ public interface CryptoAPI {
     //https://api.nomics.com/v1/prices?key=2e23f67e1188e942f871d816a21625cd60b7757b
 
 
-    @GET("prices?key=2e23f67e1188e942f871d816a21625cd60b7757b")//
-    //neyi ve hangi metod ile istediğimiz :
 
 
-    Observable<List<CryptoModel>> getData();//gözlemlenebilir obje oluşturup yayın yapıcak.
+    //URL BASE i retrofitin kendi sınıfını oluştururken belirtmek gerekiyor
 
-//    Call<List<CryptoModel>> getData();//url si verilen adrese get isteği yollar. sonunda da call yap, Liste içinde Crypto model gelicek.
+
+    @GET("prices?key=2e23f67e1188e942f871d816a21625cd60b7757b")//eklenti kısmını gir
+
+
+
+        //neyi ve hangi metod ile istediğimiz :
+
+
+    Observable<List<CryptoModel>> getData();//gözlemlenebilir obje oluşturup yayın yapıcak. Observable: Datanın yayılma eylemini yapacak olan sınıf
+
+//    Call<List<CryptoModel>> getData();//Asenkron şekilde çalışır. url si verilen adrese get isteği yollar. sonunda da call yap, Liste içinde Crypto model gelicek.
 
 
 

@@ -19,13 +19,20 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RowHolder> {
 
+    private String[] colors = {"#FF0000","#00FF00","#0000FF","#16108b","#008080","#cdaa7d","#69b00b","#393e3f"};
 
-    private ArrayList<CryptoModel> cryptoList;
-    private String[] colors = {"#FF0000","#00FF00","#0000FF","#FFFF00","#008080","#cdaa7d","#69b00b","#393e3f"};
+    private ArrayList<CryptoModel> cryptoList;//ctor da istememiz lazım
 
-    public RecyclerViewAdapter(ArrayList<CryptoModel> cryptoList) {
+//refresh!
+
+    public void setCryptoList(ArrayList<CryptoModel> cryptoList) {
         this.cryptoList = cryptoList;
     }
+
+//    public RecyclerViewAdapter(ArrayList<CryptoModel> cryptoList) {
+//        this.cryptoList = cryptoList;
+//    }
+
 
     @NonNull
     @Override
@@ -44,36 +51,37 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.bind(cryptoList.get(position),colors,position);
     }
 
+
     @Override
     public int getItemCount() {
+
         return cryptoList.size();
-    }
+    }//row say
 
 
 
-    public class RowHolder extends RecyclerView.ViewHolder {
+    public class RowHolder extends RecyclerView.ViewHolder//textviewleri tanımlar. set eder
+    {
         TextView textName;
         TextView textPrice;
 
+
+
         public RowHolder(@NonNull @NotNull View itemView) {
+
             super(itemView);
-
-
         }
-        public void bind(CryptoModel cryptoModel,String[] colors,Integer position){
+
+
+
+        public void bind(CryptoModel cryptoModel,String[] colors,Integer position)
+        {
             itemView.setBackgroundColor(Color.parseColor(colors[position%8]));
             textName = itemView.findViewById(R.id.textName);
             textPrice = itemView.findViewById(R.id.textPrice);
 
             textName.setText(cryptoModel.currency);
             textPrice.setText(cryptoModel.price+"$");
-
-
         }
-
-
-
-
-
     }
 }
