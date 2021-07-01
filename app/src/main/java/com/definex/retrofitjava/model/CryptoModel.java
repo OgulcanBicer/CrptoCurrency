@@ -9,22 +9,16 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity
 public class CryptoModel {
-
-
-
-
-
+    @ColumnInfo(name = "uid")
+    @PrimaryKey(autoGenerate = true)
+    public int uid=0;
 
     @ColumnInfo(name = "currency")
-    @SerializedName("currency")//gelecek datayı direkt okumak için. Json daki ile aynı olmalı
+    @SerializedName("currency")
     public String currency;
 
 
     @ColumnInfo(name = "price")
-    @SerializedName("price")//json ile aynı isimde olması lazım
+    @SerializedName("price")
     public String price;
-
-    @PrimaryKey(autoGenerate = true)
-    public int uid=0;
-
 }
