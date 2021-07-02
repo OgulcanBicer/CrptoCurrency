@@ -1,32 +1,25 @@
 package com.definex.retrofitjava.view;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.widget.EditText;
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.Constraints;
 import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Handler;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
+import com.definex.retrofitjava.Constant;
 import com.definex.retrofitjava.R;
 import com.definex.retrofitjava.RefreshItems;
 import com.definex.retrofitjava.adapter.RecyclerViewAdapter;
-import com.definex.retrofitjava.database.AppDataBase;
-//import com.definex.retrofitjava.database.RoomDatabase;
-import com.definex.retrofitjava.database.RoomDatabase;
+import com.definex.retrofitjava.database.DatabaseManager;
 import com.definex.retrofitjava.model.CryptoModel;
-//import com.definex.retrofitjava.model.Singelton;
-import com.definex.retrofitjava.model.Singelton;
 import com.definex.retrofitjava.service.CryptoAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -41,11 +34,11 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-//https://api.nomics.com/v1/prices?key=2e23f67e1188e942f871d816a21625cd60b7757b
+
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String BASE_URL = "https://api.nomics.com/v1/";
+
     ArrayList<CryptoModel> cryptoModels;//indireceğimiz data için
     Retrofit retrofit;
     RecyclerView recyclerView;
@@ -54,37 +47,23 @@ public class MainActivity extends AppCompatActivity {
     EditText editTextCurrencyName;
     Boolean flag = false;
     CryptoAPI cryptoAPI;
-    RoomDatabase roomDatabase;
-    AppDataBase db;
-    Singelton singelton;
+
     WorkRequest workRequest;
 
-    Context context;
-//    RoomDatabase roomDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         editTextCurrencyName = findViewById(R.id.editTextCurrencyName);
         recyclerView = findViewById(R.id.recyclerView);
-//        roomDatabase = new RoomDatabase();
-//        roomDatabase.setContext(this.getApplicationContext());
-        runCreate();
-    }
-    public void runCreate(){
+
         retrofitCreate();
         loadDataCreate();
         loadData();
         recyclerViewCreate();
         workerCreate();
-        context = this.getApplicationContext();
-        Singelton.getInstance();
-//        singelton.setContext(context);
-
-
-        db = AppDataBase.getDbInstance(context);
-//        getLiveData();
     }
+
     //create
     public void workerCreate() {
         ///////hangi durumda çalışcak
@@ -122,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         //retrofit & json
         Gson gson = new GsonBuilder().setLenient()//sL : gson aldığını belirtir
                 .create();
-        retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
+        retrofit = new Retrofit.Builder().baseUrl(Constant.getInstance().getBase_Url())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//rxjava kullanılacığını belirtmek için
                 .addConverterFactory(GsonConverterFactory.create(gson))//gelen veriyi retrofite bildir
                 .build();
@@ -141,7 +120,9 @@ public class MainActivity extends AppCompatActivity {
             loadData();
     }
     public void btnInsertDataBaseOnclick(View view){
-      insertDatas();
+        DatabaseManager.getInstance().replaceAllCurrency(cryptoModels);
+
+        setAdapterDatabase();
     }
 
     public void btnGoLiveOnClick(View view){
@@ -170,11 +151,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-//        Singelton singelton = Singelton.getInstance();
-//        singelton.setCryptoModelArrayList(cryptoModels);
-
-
-
 
         setAdapterLiveData(cryptoModels);
     }
@@ -189,20 +165,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-    public void insertDatas() {
-        db.currencyDAO().nukeTable();
-        db.currencyDAO().insertCurrencies(cryptoModels);
-        setAdapterDatabase();
-
-    }
     private void setAdapterDatabase(){
-        recyclerViewAdapter.setDbCryptoList((ArrayList<CryptoModel>) db.currencyDAO().getAllCurrencies());
+        recyclerViewAdapter.setDbCryptoList((ArrayList<CryptoModel>) DatabaseManager.getInstance().getAllCurrencies());
         recyclerViewAdapter.notifyDataSetChanged();
-//        getResponceAfterInterval.run();
-
-
     }
 
     //destroy
@@ -229,16 +194,3 @@ public class MainActivity extends AppCompatActivity {
     };
 
 }
-
-
-//    public void insertDatas() {
-//     roomDatabase.setCryptoModels(cryptoModels);
-//     roomDatabase.insertDatas();
-//    }
-//
-//
-//    private void setAdapterDatabase(){
-//        recyclerViewAdapter.setDbCryptoList((ArrayList<CryptoModel>) db.currencyDAO().getAllCurrencies());
-//        recyclerViewAdapter.notifyDataSetChanged();
-////        getResponceAfterInterval.run();
-//    }

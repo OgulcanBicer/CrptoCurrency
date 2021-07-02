@@ -1,8 +1,6 @@
 package com.definex.retrofitjava;
 
 import android.content.Context;
-import android.os.Handler;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
@@ -11,8 +9,6 @@ import androidx.work.WorkerParameters;
 import com.definex.retrofitjava.adapter.RecyclerViewAdapter;
 import com.definex.retrofitjava.database.AppDataBase;
 import com.definex.retrofitjava.model.CryptoModel;
-import com.definex.retrofitjava.model.Singelton;
-import com.definex.retrofitjava.view.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +35,7 @@ public class RefreshItems extends Worker {
 //        db = AppDataBase.getDbInstance(myContext);
     }
     public void insertDatas(ArrayList<CryptoModel> cryptoModels) {
-        db.currencyDAO().nukeTable();
+        db.currencyDAO().deleteAllCurrency();
         db.currencyDAO().insertCurrencies(cryptoModels);
         setAdapterDatabase();
     }
