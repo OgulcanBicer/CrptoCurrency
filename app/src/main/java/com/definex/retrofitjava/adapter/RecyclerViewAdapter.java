@@ -25,7 +25,7 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RowHolder> {
 
     private final String[] colors = {"#364f36", "#205a86", "#515d5f", "#2c404c"};
-    public ArrayList<CryptoModel> cryptoList = new ArrayList<>();
+//    public ArrayList<CryptoModel> cryptoList = new ArrayList<>();
     public ArrayList<CryptoModel> dbCryptoList = new ArrayList<>();
     TextView textName;
     TextView textPrice;
@@ -36,25 +36,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
 
-    public void setCryptoList(ArrayList<CryptoModel> cryptoList) {
-        this.cryptoList = cryptoList;
-    }
+//    public void setCryptoList(ArrayList<CryptoModel> cryptoList) {
+//        this.cryptoList = cryptoList;
+//    }
 
     public void setDbCryptoList(ArrayList<CryptoModel> dbCryptoList) {
         this.dbCryptoList = dbCryptoList;
     }
 
 
-    public void testR(){
-        System.out.println("rec ici ");
-        setDbCryptoListWork(cryptoList);
-        notifyDataSetChanged();
-    }
-    public void setDbCryptoListWork(ArrayList<CryptoModel> cryptoList) {
-        this.dbCryptoList = cryptoList;
-        System.out.println("seter ici");
-        notifyDataSetChanged();
-    }
+//
+//    public void setDbCryptoListWork(ArrayList<CryptoModel> cryptoList) {
+//        this.dbCryptoList = cryptoList;
+//        System.out.println("seter ici");
+//        notifyDataSetChanged();
+//    }
     @NonNull
     @Override
     public RowHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -66,12 +62,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.RowHolder holder, int position) {
-        holder.bind(cryptoList.get(position), dbCryptoList.get(position), colors, position);
+        holder.bind(dbCryptoList.get(position), colors, position);
     }
 
     @Override
     public int getItemCount() {
-        return cryptoList.size();
+        return dbCryptoList.size();
     }//row say
 
     public class RowHolder extends RecyclerView.ViewHolder//textviewleri tanımlar. set eder
@@ -80,31 +76,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public RowHolder(@NonNull @NotNull View itemView) {
             super(itemView);
         }
-        public void bind(CryptoModel cryptoModel, CryptoModel dbmodel, String[] colors, Integer position) {
+        public void bind(CryptoModel dbmodel, String[] colors, Integer position) {
             itemView.setBackgroundColor(Color.parseColor(colors[position % 4]));
             textName = itemView.findViewById(R.id.textName);
             textPrice = itemView.findViewById(R.id.textPrice);
             textPriceFromDB = itemView.findViewById(R.id.textPriceFromDB);
-            setColor(cryptoModel, dbmodel);
+            setColor(dbmodel);
 
-            textName.setText(cryptoModel.currency);
-            textPrice.setText(textArrow + cryptoModel.price + "$" + "  %" + (double)  (int) (((Double.parseDouble(cryptoModel.price) - Double.parseDouble(dbmodel.price)) / Double.parseDouble(cryptoModel.price) / 100) * 10000000) / 100);
-            textPriceFromDB.setText(dbmodel.price + "$");
+            textName.setText(dbmodel.currency);
+            textPrice.setText(textArrow + dbmodel.price + "$" + "  %" + (double)  (int) (((Double.parseDouble(dbmodel.price) - Double.parseDouble(dbmodel.oldPrice)) / Double.parseDouble(dbmodel.price) / 100) * 10000000) / 100);
+            textPriceFromDB.setText(dbmodel.oldPrice + "$");
         }
 
-        public void setColor(CryptoModel cryptoModel, CryptoModel dbmodel) {
+        public void setColor(CryptoModel dbmodel) {
 
             textArrow = "";
-            if (Double.parseDouble(cryptoModel.price) > Double.parseDouble(dbmodel.price)) {
+            if (Double.parseDouble(dbmodel.price) > Double.parseDouble(dbmodel.oldPrice)) {
                 textPrice.setTextColor(Color.GREEN);
                 textArrow = ("↑ ");
             }
 
-            if (Double.parseDouble(cryptoModel.price) < Double.parseDouble(dbmodel.price)) {
+            if (Double.parseDouble(dbmodel.price) < Double.parseDouble(dbmodel.oldPrice)) {
                 textPrice.setTextColor(Color.RED);
                 textArrow = ("↓ ");
             }
-            if (Double.parseDouble(cryptoModel.price) == Double.parseDouble(dbmodel.price)) {
+            if (Double.parseDouble(dbmodel.price) == Double.parseDouble(dbmodel.oldPrice)) {
                 textPrice.setTextColor(Color.WHITE);
             }
         }

@@ -1,0 +1,17 @@
+//ilk aşama retrofit db ye yazsın (yeni field aç) old-new
+//adapterü db beslesin
+//db ye price ı double kaydet
+//alter etmeyi araştır (version 2 de)
+//loading
+
+
+
+DatabaseManager entegre edildi.
+CurrencyDAO ilgili metodlar eklendi.
+
+//ÖDEV;
+1- filtreleme direk databaseten yapalım.
+2- refrofittten gelen ve database e işlemleri Manager üzerinden geçirelim.
+3- WorkManager ı aktif edelim.
+4- tasarım çalışmasını da bu repodaya aktaralım
+5- crypto adaptor listesini yeni tasarımdaki liste UI ı ile yapalım

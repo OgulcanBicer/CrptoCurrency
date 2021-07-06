@@ -22,17 +22,44 @@ public class DatabaseManager {
         return instance;
     }
 
-    public void setContext(Context context){
+    public void setContext(Context context) {
         db = AppDataBase.getDbInstance(context);
     }
 
 
-    public List<CryptoModel> getAllCurrencies(){
+    public List<CryptoModel> getAllCurrencies() {
         return db.currencyDAO().getAllCurrencies();
     }
 
-    public void replaceAllCurrency(ArrayList<CryptoModel> cryptoModels){
+    public void replaceAllCurrency(ArrayList<CryptoModel> cryptoModels) {
         db.currencyDAO().deleteAllCurrency();
         db.currencyDAO().insertCurrencies(cryptoModels);
+    }
+
+    public void updateOldCurrency(ArrayList<CryptoModel> cryptoModels) {
+
+        for (CryptoModel cm:cryptoModels) {
+
+        db.currencyDAO().updateOldCurrency(cm.currency);
+        }
+    }
+        public void updatedCurrency(String currency, String newPrice) {
+
+
+
+
+        db.currencyDAO().updateCurrency(currency, newPrice);
+    }
+
+
+
+
+    public void updateTable(ArrayList<CryptoModel> cryptoModels) {
+        for (CryptoModel cm : cryptoModels) {
+            db.currencyDAO().updateTable(cm.currency, cm.price);
+        }
+    }
+    public void updateTablePrice(String currency,String price) {
+            db.currencyDAO().updateTable(currency,price);
     }
 }

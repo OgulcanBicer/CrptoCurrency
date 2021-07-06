@@ -21,4 +21,8 @@ public class CryptoModel {
     @ColumnInfo(name = "price")
     @SerializedName("price")
     public String price;
+
+    @ColumnInfo(name = "oldPrice")
+    public String oldPrice;
+
 }
